@@ -1,0 +1,16 @@
+{
+  "workbench.editorAssociations": {
+    "*.md": "vscode.markdown.preview.editor"
+  },
+
+  // Show parent folder + filename in tabs (e.g., "ambassador/index.ts")
+  "workbench.editor.labelFormat": "default",
+
+  // Show parent folder + filename + extension in tabs (e.g., "ambassador index.ts")
+  "workbench.editor.customLabels.enabled": true,
+  "workbench.editor.customLabels.patterns": {
+    "**/repositories/*/**/.env": "(${dirname(-3)}) .env",
+    "**/repositories/*/**/.env.*": "(${dirname(-3)}) .env.${extname}",
+    "**/repositories/*/**": "(${dirname(-3)}) ${filename}.${extname}"
+  }
+}

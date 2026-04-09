@@ -1,0 +1,35 @@
+// settings.local.json — Personal Claude Code settings for this project.
+// Copy this file to settings.local.json and customize for your environment.
+// settings.local.json is gitignored, so your personal settings stay private.
+//
+// Full reference: https://docs.anthropic.com/en/docs/claude-code/settings
+{
+  // Permissions control which tool calls Claude can make without prompting you.
+  // "allow" entries are added automatically as you approve actions during a session.
+  // "deny" entries block actions from ever being taken, even if you approve them.
+  // Leave "allow" empty to start — it will populate as you use Claude.
+  "permissions": {
+    "allow": [],
+    "deny": []
+  },
+
+  // Load all MCP servers defined in .mcp.json automatically.
+  // Set to false if you want to selectively enable servers via "enabledMcpjsonServers" instead.
+  "enableAllProjectMcpServers": false,
+
+  // Selectively enable specific MCP servers from .mcp.json.
+  // Only relevant if "enableAllProjectMcpServers" is false.
+  "enabledMcpjsonServers": ["atlassian", "context7"],
+
+  // Plugins extend Claude with additional capabilities like skills, agents, hooks, and MCP servers.
+  // Recommended plugins below.
+  "enabledPlugins": {
+    // TypeScript language server — gives Claude access to type checking,
+    // go-to-definition, and accurate type-safe suggestions. Recommended.
+    "typescript-lsp@claude-plugins-official": true,
+
+    // Context7 — pulls up-to-date, version-specific documentation and code
+    // examples straight from the source. Useful for library APIs and SDKs.
+    "context7@claude-plugins-official": true
+  }
+}

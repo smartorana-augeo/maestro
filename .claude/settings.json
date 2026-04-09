@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "deny": ["Read(.env)"]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path' | bash -c 'read -r f; [ -n \"$f\" ] && command -v npx >/dev/null 2>&1 && npx prettier --write --ignore-unknown -- \"$f\" 2>/dev/null || true'",
+            "statusMessage": "Formatting with Prettier..."
+          }
+        ]
+      }
+    ]
+  }
+}

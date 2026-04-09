@@ -1,0 +1,61 @@
+name: Update Submodules
+
+on:
+  schedule:
+    - cron: '30 16 * * *' # 11:30 AM CT (UTC-5)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-submodules:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: false
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SUBMODULE_SSH_KEY }}
+
+      - name: Update submodules
+        run: |
+          git submodule update --init --remote -- repositories/envoy
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            {
+              echo "diff_summary<<EOF"
+              git diff --submodule=short
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create Pull Request
+        if: steps.changes.outputs.has_changes == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "chore(submodules): update submodule references"
+          branch: automated/update-submodules
+          title: "chore(submodules): update submodule references"
+          body: |
+            Automated submodule update — latest commits from all repositories.
+
+            Updated submodules:
+            ```
+            ${{ steps.changes.outputs.diff_summary }}
+            ```
+          labels: |
+            dependencies
+            submodules
