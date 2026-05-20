@@ -1,0 +1,4 @@
+[submodule "repositories/encore"]
+	path = repositories/encore
+	url = https://github.com/Workplace-Engagement/encore.git
+	branch = develop
